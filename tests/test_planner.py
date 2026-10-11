@@ -1,6 +1,4 @@
-
 from backend.app.agents.planner import plan_request
-
 
 def test_empty_request_is_rejected():
     result = plan_request("   ")
