@@ -328,7 +328,6 @@ def ask_agent(prompt: str, user_id: str = "default"):
     return agent(enhanced_prompt)
 
 
-
 if __name__ == "__main__":
     response = ask_agent(
         "According to the AI From Data to ROI document, "
