@@ -11,6 +11,7 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from memory.memory_store import get_memory, save_memory, clear_memory
 from backend.app.agents.planner import plan_request
+from backend.app.evaluation.retrieval import retrieve_evidence, format_evidence
 
 MODEL_ID = "us.anthropic.claude-haiku-4-5-20251001-v1:0"
 BUCKET_NAME = "bedrock-doc-qa-documents-gopi"
@@ -66,49 +67,10 @@ def search_knowledge_base(query: str) -> str:
     unique relevant document content for the agent.
     """
     try:
-        response = bedrock_agent_runtime.retrieve(
-            knowledgeBaseId=KNOWLEDGE_BASE_ID,
-            retrievalQuery={
-                "text": query
-            },
-            retrievalConfiguration={
-                "managedSearchConfiguration": {
-                    "numberOfResults": 5
-                }
-            }
+        evidence = retrieve_evidence(
+            bedrock_agent_runtime, KNOWLEDGE_BASE_ID, query, limit=5
         )
-
-        results = response.get("retrievalResults", [])
-
-        if not results:
-            return "SEARCH_STATUS=NO_RESULTS"
-
-        unique_evidence = []
-        seen = set()
-
-        for result in results:
-            content = result.get("content", {}).get("text", "").strip()
-
-            if not content:
-                continue
-
-            # Normalize whitespace for duplicate detection
-            normalized = " ".join(content.split())
-
-            if normalized in seen:
-                continue
-
-            seen.add(normalized)
-            unique_evidence.append(content)
-
-        if not unique_evidence:
-            return "SEARCH_STATUS=NO_DOCUMENT_CONTENT"
-
-        return (
-            "SEARCH_STATUS=SUCCESS\n"
-            "SOURCE=Enterprise Knowledge Base\n\n"
-            + "\n\n--- DOCUMENT EVIDENCE ---\n\n".join(unique_evidence)
-        )
+        return format_evidence(evidence) if evidence else "SEARCH_STATUS=NO_RESULTS"
 
     except Exception as exc:
         return (
@@ -192,6 +154,8 @@ Knowledge Base rules:
   SEARCH_STATUS=SUCCESS.
 - Never invent facts that are not supported by the retrieved
   evidence.
+- Cite the SOURCE_NAME for document-specific facts when source metadata is available.
+- If SOURCE_ID=UNKNOWN, say the source could not be identified.
 
 Knowledge Base retry policy:
 - You may perform ONE additional Knowledge Base search if
