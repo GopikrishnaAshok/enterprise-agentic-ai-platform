@@ -1,0 +1,17 @@
+[
+  {
+    "question": "Which document describes AI investment?",
+    "relevant_ids": ["s3://example-bucket/AI_From_Data_to_ROI.pdf"],
+    "mock_results": [
+      {"source_id": "s3://example-bucket/AI_From_Data_to_ROI.pdf", "text": "Example investment evidence"},
+      {"source_id": "s3://example-bucket/Business_Investment_Plan.pdf", "text": "Other evidence"}
+    ]
+  },
+  {
+    "question": "Which document describes the business plan?",
+    "relevant_ids": ["s3://example-bucket/Business_Investment_Plan.pdf"],
+    "mock_results": [
+      {"source_id": "s3://example-bucket/Business_Investment_Plan.pdf", "text": "Example plan"}
+    ]
+  }
+]
