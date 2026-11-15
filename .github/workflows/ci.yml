@@ -197,7 +197,7 @@ jobs:
     needs:
       - test
       - docker-build
-      - deployf
+      - deploy
     if: needs.deploy.result == 'success'
 
     steps:
