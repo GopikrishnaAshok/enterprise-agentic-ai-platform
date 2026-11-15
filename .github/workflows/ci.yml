@@ -99,6 +99,50 @@ jobs:
 
           echo "GitHub OIDC token request is available"
 
+      - name: Inspect OIDC claims
+        shell: bash
+        run: |
+          python - <<'PY'
+          import base64
+          import json
+          import os
+          import urllib.parse
+          import urllib.request
+
+          url = os.environ["ACTIONS_ID_TOKEN_REQUEST_URL"]
+          token = os.environ["ACTIONS_ID_TOKEN_REQUEST_TOKEN"]
+
+          separator = "&" if "?" in url else "?"
+          url += separator + urllib.parse.urlencode({
+              "audience": "sts.amazonaws.com"
+          })
+
+          request = urllib.request.Request(
+              url,
+              headers={"Authorization": f"Bearer {token}"}
+          )
+
+          with urllib.request.urlopen(request) as result:
+              jwt = json.load(result)["value"]
+
+          payload = jwt.split(".")[1]
+          payload += "=" * (-len(payload) % 4)
+
+          claims = json.loads(
+              base64.urlsafe_b64decode(payload)
+          )
+
+          for key in (
+              "iss",
+              "aud",
+              "sub",
+              "repository",
+              "ref",
+              "event_name"
+          ):
+              print(f"{key}: {claims.get(key)}")
+          PY
+
       - name: Configure AWS credentials via OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
