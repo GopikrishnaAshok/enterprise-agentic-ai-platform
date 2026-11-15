@@ -1,7 +1,7 @@
 
+import base64
 import json
 import logging
-import os
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -9,82 +9,112 @@ logger.setLevel(logging.INFO)
 MAX_PROMPT_LENGTH = 4000
 
 
+def response(status, payload):
+    return {
+        "statusCode": status,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "body": json.dumps(payload)
+    }
+
+
+def extract_answer(result):
+    if isinstance(result, str):
+        return result
+
+    message = getattr(result, "message", None)
+
+    if isinstance(message, dict):
+        return "\n".join(
+            item["text"]
+            for item in message.get("content", [])
+            if isinstance(item, dict)
+            and isinstance(item.get("text"), str)
+        )
+
+    if isinstance(message, str):
+        return message
+
+    return str(result)
+
+
 def lambda_handler(event, context):
-    """Handle API Gateway HTTP API requests."""
+    event = event or {}
 
-    request_context = event.get("requestContext") or {}
-    http_context = request_context.get("http") or {}
-    method = http_context.get("method", "")
+    http = (
+        event.get("requestContext", {})
+        .get("http", {})
+    )
 
-    if method != "POST":
-        return respond(405, {"error": "Method not allowed"})
+    method = http.get("method", "")
+    path = http.get("path", "")
+
+    if method == "GET" and path.endswith("/health"):
+        return response(200, {
+            "status": "healthy",
+            "service": "enterprise-agent-api"
+        })
+
+    if method != "POST" or not path.endswith("/agent"):
+        return response(404, {
+            "error": "Route not found"
+        })
 
     try:
         body = event.get("body") or "{}"
 
         if event.get("isBase64Encoded"):
-            import base64
             body = base64.b64decode(body).decode("utf-8")
 
         if isinstance(body, str):
             body = json.loads(body)
 
         if not isinstance(body, dict):
-            return respond(400, {"error": "JSON object required"})
+            return response(400, {
+                "error": "Expected JSON object"
+            })
 
         prompt = body.get("prompt")
 
         if not isinstance(prompt, str) or not prompt.strip():
-            return respond(400, {"error": "A prompt is required"})
+            return response(400, {
+                "error": "A non-empty prompt is required"
+            })
+
+        prompt = prompt.strip()
 
         if len(prompt) > MAX_PROMPT_LENGTH:
-            return respond(400, {"error": "Prompt is too long"})
+            return response(400, {
+                "error": "Prompt exceeds maximum length"
+            })
 
-        # File-based memory is not persistent in Lambda.
-        # Block these commands until persistent storage is configured.
-        if prompt.strip().lower().startswith("remember:") or \
-           prompt.strip().lower() in ("memory show", "memory clear"):
-            return respond(
-                501,
-                {"error": "Persistent memory is not configured"}
-            )
+        lower_prompt = prompt.lower()
+
+        if (
+            lower_prompt.startswith("remember:")
+            or lower_prompt in ("memory show", "memory clear")
+        ):
+            return response(501, {
+                "error": "Cloud memory is not configured"
+            })
 
         from backend.app.agents.agent import ask_agent
 
-        result = ask_agent(prompt.strip())
+        result = ask_agent(prompt)
 
-        # Strands returns an AgentResult for normal requests.
-        answer = getattr(result, "message", None)
-
-        if isinstance(answer, dict):
-            blocks = answer.get("content", [])
-            answer = "\n".join(
-                block.get("text", "")
-                for block in blocks
-                if isinstance(block, dict) and "text" in block
-            )
-
-        if not isinstance(answer, str):
-            answer = str(result)
-
-        return respond(200, {
+        return response(200, {
             "status": "success",
-            "answer": answer
+            "answer": extract_answer(result)
         })
 
-    except (ValueError, json.JSONDecodeError):
-        return respond(400, {"error": "Invalid JSON request"})
+    except (json.JSONDecodeError, UnicodeDecodeError, ValueError):
+        return response(400, {
+            "error": "Invalid request"
+        })
 
     except Exception:
         logger.exception("Agent invocation failed")
-        return respond(500, {"error": "Agent execution failed"})
-
-
-def respond(status_code, body):
-    return {
-        "statusCode": status_code,
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "body": json.dumps(body)
-    }
+        return response(500, {
+            "error": "Agent execution failed"
+        })
