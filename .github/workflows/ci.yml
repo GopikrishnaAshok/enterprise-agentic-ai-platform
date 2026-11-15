@@ -113,11 +113,40 @@ jobs:
 
           echo "IMAGE_URI=$IMAGE" >> "$GITHUB_ENV"
 
-      - name: Deploy Lambda
+
+      - name: Create or update Lambda
         run: |
-          aws lambda update-function-code \
+          if aws lambda get-function \
             --function-name "$LAMBDA_FUNCTION" \
-            --image-uri "$IMAGE_URI" \
+            --region "$AWS_REGION" > /dev/null 2>&1; then
+
+            echo "Lambda exists. Updating image..."
+
+            aws lambda update-function-code \
+              --function-name "$LAMBDA_FUNCTION" \
+              --image-uri "$IMAGE_URI" \
+              --region "$AWS_REGION"
+
+          else
+
+            echo "Lambda does not exist. Creating..."
+
+            aws lambda create-function \
+              --function-name "$LAMBDA_FUNCTION" \
+              --package-type Image \
+              --code ImageUri="$IMAGE_URI" \
+              --role arn:aws:iam::917301404773:role/enterprise-agent-lambda-role \
+              --architectures x86_64 \
+              --timeout 120 \
+              --memory-size 1024 \
+              --region "$AWS_REGION"
+
+          fi
+
+      - name: Wait for Lambda deployment
+        run: |
+          aws lambda wait function-active-v2 \
+            --function-name "$LAMBDA_FUNCTION" \
             --region "$AWS_REGION"
 
           aws lambda wait function-updated \
@@ -168,7 +197,7 @@ jobs:
     needs:
       - test
       - docker-build
-      - deploy
+      - deployf
     if: needs.deploy.result == 'success'
 
     steps:
