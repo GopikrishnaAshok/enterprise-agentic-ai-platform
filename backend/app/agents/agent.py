@@ -1,3 +1,8 @@
+import logging
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
 from strands import Agent, tool
 from strands.models import BedrockModel
 from strands.hooks import HookProvider, HookRegistry, BeforeToolCallEvent, BeforeInvocationEvent
@@ -73,9 +78,14 @@ def search_knowledge_base(query: str) -> str:
         return format_evidence(evidence) if evidence else "SEARCH_STATUS=NO_RESULTS"
 
     except Exception as exc:
+        logger.exception(
+            "Knowledge Base retrieval failed for KB %s",
+            KNOWLEDGE_BASE_ID
+        )
         return (
-            f"SEARCH_STATUS=ERROR\n"
-            f"{type(exc).__name__}: {exc}"
+            "SEARCH_STATUS=ERROR\n"
+            f"ERROR_TYPE={type(exc).__name__}\n"
+            "Knowledge Base retrieval failed. Check Lambda logs."
         )
 
 @tool
