@@ -1,113 +1,118 @@
 <div align="center">
 
-# ⚡ ENTERPRISE AGENTIC AI
-### Intelligent Operations · Autonomous Tool Calling · Cloud-Native Engineering
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f172a,50:4338ca,100:06b6d4&height=220&section=header&text=ENTERPRISE%20AGENTIC%20AI&fontSize=36&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Cloud-Native%20AI%20Operations%20Platform&descAlignY=60&descSize=17" width="100%" alt="Enterprise Agentic AI"/>
 
-**A secure, serverless AI operations platform powered by Amazon Bedrock, Strands Agents, AWS Lambda, and n8n.**
+### Intelligent Operations · Agentic Workflows · AWS Cloud
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:090979,50:6C3BFF,100:00D4FF&height=180&section=header&text=ENTERPRISE%20AGENTIC%20AI&fontSize=35&fontColor=ffffff&animation=fadeIn&fontAlignY=35" width="100%" alt="Enterprise Agentic AI Banner"/>
+A serverless AI operations platform combining **Amazon Bedrock, Strands Agents, Retrieval-Augmented Generation, and n8n workflow automation**.
+
+<br>
 
 ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![AWS](https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazonwebservices&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
-![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
 ![n8n](https://img.shields.io/badge/n8n-EA4B71?style=for-the-badge&logo=n8n&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
 
-<br/>
+<br>
 
-![Deployment](https://img.shields.io/badge/Deployment-AWS_Lambda-00C853?style=flat-square)
-![API Security](https://img.shields.io/badge/API-AWS_IAM_Protected-blue?style=flat-square)
-![RAG](https://img.shields.io/badge/RAG-Amazon_Bedrock-purple?style=flat-square)
-![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub_Actions-success?style=flat-square)
-
-**[Architecture](#-system-architecture) • [Features](#-core-capabilities) • [Technology](#-technology-stack) • [Validation](#-verified-testing) • [Engineering](#-engineering-highlights)**
+![Amazon Bedrock](https://img.shields.io/badge/AI-Amazon_Bedrock-8B5CF6)
+![Strands Agents](https://img.shields.io/badge/Framework-Strands_Agents-6366F1)
+![Deployment](https://img.shields.io/badge/Deployment-AWS_Lambda-16A34A)
+![Security](https://img.shields.io/badge/Security-AWS_IAM-0284C7)
 
 </div>
 
 ---
 
-## 🌌 Overview
+## Overview
 
-Enterprise Agentic AI is a cloud-hosted AI operations assistant designed to combine large language model reasoning with practical enterprise tools.
+**Enterprise Agentic AI Operations Platform** is a cloud-native backend system that connects large language models with operational tools, enterprise document retrieval, and business analytics.
 
-Rather than relying solely on generated answers, the agent can invoke dedicated tools to retrieve document evidence, inspect S3 documents, and calculate business metrics.
+Built with **Python and Strands Agents**, the platform uses Amazon Bedrock for model inference and AWS Lambda for serverless execution.
 
-The platform integrates a local n8n automation workflow with an AWS-hosted API protected by IAM authentication.
+An IAM-protected API Gateway endpoint exposes the agent to external clients, including an n8n workflow that automates requests and processes agent responses.
 
-### ✨ What makes this project different?
-
-- **Real agent tool execution** — LLM-driven tool selection using Strands Agents
-- **Document-grounded intelligence** — Retrieval through Amazon Bedrock Knowledge Bases
-- **Business reasoning** — Deterministic ROI calculations
-- **Workflow orchestration** — n8n integration with authenticated AWS APIs
-- **Serverless architecture** — Containerized Python running on AWS Lambda
-- **Automated deployments** — GitHub Actions, OIDC, and Amazon ECR
-- **Operational monitoring** — CloudWatch logs, alarms, and SNS email alerts
+The implementation covers agent orchestration, RAG, cloud integrations, containerized deployment, CI/CD, and operational monitoring.
 
 ---
 
-## 🏗️ System Architecture
+## System Architecture
 
 ```mermaid
 flowchart TD
-    U["👤 User / n8n Workflow"]
-    A["🔐 Amazon API Gateway<br/>AWS IAM Authentication"]
-    L["⚡ AWS Lambda<br/>Python + Docker"]
-    AG["🧠 Strands AI Agent"]
-    B["✨ Amazon Bedrock<br/>Claude Haiku"]
-    KB["📚 Bedrock Knowledge Base"]
-    S3["🗂️ Amazon S3"]
-    ROI["📊 Business Metrics Tool"]
-    GH["🐙 GitHub Actions"]
-    ECR["📦 Amazon ECR"]
-    CW["📈 Amazon CloudWatch"]
-    SNS["🔔 Amazon SNS"]
+    USER["User / n8n Workflow"]
+    API["API Gateway - IAM Auth"]
+    LAMBDA["AWS Lambda - Python / Docker"]
+    AGENT["Strands AI Agent"]
+    MODEL["Amazon Bedrock - Claude Haiku"]
+    KB["Bedrock Knowledge Base"]
+    S3["Amazon S3"]
+    ROI["Business Metrics"]
+    GH["GitHub Actions"]
+    ECR["Amazon ECR"]
+    CW["CloudWatch"]
+    SNS["Amazon SNS"]
 
-    U --> A
-    A --> L
-    L --> AG
-    AG <--> B
-    AG --> KB
-    AG --> S3
-    AG --> ROI
+    USER --> API
+    API --> LAMBDA
+    LAMBDA --> AGENT
+    AGENT <--> MODEL
+    AGENT --> KB
+    AGENT --> S3
+    AGENT --> ROI
 
     GH --> ECR
-    ECR --> L
-    L --> CW
-    A --> CW
+    ECR --> LAMBDA
+    LAMBDA --> CW
+    API --> CW
     CW --> SNS
 
-    classDef cloud fill:#172554,stroke:#38bdf8,color:#fff
-    classDef ai fill:#312e81,stroke:#a78bfa,color:#fff
-    classDef ops fill:#064e3b,stroke:#34d399,color:#fff
+    classDef gateway fill:#172554,stroke:#38bdf8,color:#ffffff
+    classDef intelligence fill:#312e81,stroke:#a78bfa,color:#ffffff
+    classDef operations fill:#064e3b,stroke:#34d399,color:#ffffff
 
-    class A,L,ECR cloud
-    class AG,B,KB,ROI ai
-    class GH,CW,SNS,S3 ops
+    class API,LAMBDA,ECR gateway
+    class AGENT,MODEL,KB,ROI intelligence
+    class GH,CW,SNS,S3 operations
 ```
+
+### Request Lifecycle
+
+1. A client or n8n workflow submits an authenticated request to API Gateway.
+2. API Gateway invokes the containerized AWS Lambda backend.
+3. The Strands agent interprets the request and selects the appropriate tool.
+4. The selected tool performs document retrieval, S3 inspection, or business calculations.
+5. The agent processes the tool output and returns a natural-language response.
 
 ---
 
-## 🚀 Core Capabilities
+## Core Capabilities
 
 <table>
 <tr>
 <td width="50%" valign="top">
 
-### 🧠 Agentic Intelligence
-- Strands Agents orchestration
-- Amazon Bedrock model integration
-- Natural-language task interpretation
-- Dynamic tool invocation
+### 🧠 Agent Orchestration
+
+Natural-language request processing through Strands Agents and Amazon Bedrock.
+
+- LLM-driven tool calling
+- Task classification and planning
+- Structured tool execution
+- Response generation
 
 </td>
 <td width="50%" valign="top">
 
-### 📚 Knowledge Retrieval
-- Bedrock Knowledge Bases
-- Document evidence retrieval
-- RAG-powered summaries
-- Source-aware responses
+### 📚 Retrieval-Augmented Generation
+
+Document-grounded responses using an existing Amazon Bedrock Knowledge Base.
+
+- Knowledge Base retrieval
+- Relevant evidence extraction
+- Document summarization
+- Source-aware answers
 
 </td>
 </tr>
@@ -115,39 +120,51 @@ flowchart TD
 <td valign="top">
 
 ### 📊 Business Analytics
+
+Dedicated calculation tools for financial and operational analysis.
+
 - ROI calculation
-- Net benefit computation
+- Net return analysis
 - Input validation
-- Explainable financial results
+- Explainable calculations
 
 </td>
 <td valign="top">
 
-### 🗂️ AWS Operations
-- Amazon S3 document discovery
+### ☁️ AWS Integration
+
+Serverless operations with AWS-managed services.
+
+- Amazon S3 document listing
 - IAM-scoped resource access
-- CloudWatch observability
-- Serverless execution
+- Lambda-based execution
+- CloudWatch monitoring
 
 </td>
 </tr>
 <tr>
 <td valign="top">
 
-### 🔄 Workflow Automation
-- n8n webhook integration
-- Authenticated HTTP requests
-- AWS SigV4 authorization
-- JSON request/response processing
+### 🔄 n8n Automation
+
+Workflow integration between n8n and the deployed AWS agent.
+
+- Webhook-triggered workflows
+- AWS IAM-authenticated requests
+- JSON request and response handling
+- External agent invocation
 
 </td>
 <td valign="top">
 
-### 🚢 DevOps & Deployment
-- Docker containerization
+### 🚀 DevOps
+
+Containerized deployment with automated delivery.
+
+- Docker packaging
 - GitHub Actions CI/CD
+- Amazon ECR
 - AWS OIDC authentication
-- Amazon ECR image deployment
 
 </td>
 </tr>
@@ -155,21 +172,21 @@ flowchart TD
 
 ---
 
-## 🧰 Technology Stack
+## Technology Stack
 
 | Layer | Technology |
 |---|---|
 | Programming | Python |
-| AI Framework | Strands Agents |
-| Language Model | Claude Haiku 4.5 via Amazon Bedrock |
-| Knowledge Retrieval | Amazon Bedrock Knowledge Bases |
-| Backend Compute | AWS Lambda |
-| API Layer | Amazon API Gateway |
+| Agent Framework | Strands Agents |
+| LLM | Claude Haiku 4.5 via Amazon Bedrock |
+| RAG | Amazon Bedrock Knowledge Bases |
+| Backend | AWS Lambda |
+| API | Amazon API Gateway |
 | Storage | Amazon S3 |
-| Workflow Automation | n8n |
+| Automation | n8n |
 | Containerization | Docker |
-| Container Registry | Amazon ECR |
 | CI/CD | GitHub Actions |
+| Container Registry | Amazon ECR |
 | Authentication | AWS IAM / SigV4 |
 | Monitoring | Amazon CloudWatch |
 | Notifications | Amazon SNS |
@@ -177,146 +194,143 @@ flowchart TD
 
 ---
 
-## 🧪 Verified Testing
+## Agent Tools
 
-The following integration behaviors have been validated against the deployed platform.
+The agent uses specialized tools to perform operations beyond text generation.
 
-| Test | Result |
+| Tool | Responsibility |
 |---|---|
-| Authenticated API request | ✅ Passed |
-| Unauthenticated API rejection | ✅ HTTP 403 |
-| Knowledge Base retrieval | ✅ Passed |
-| Document summarization | ✅ Passed |
-| ROI calculation | ✅ Correct result |
-| S3 document listing | ✅ Passed |
-| Zero-investment validation | ✅ Passed |
-| SNS email notification | ✅ Delivered |
-| Lambda deployment health | ✅ Active |
+| `search_knowledge_base` | Retrieve relevant enterprise document evidence |
+| `list_s3_documents` | Discover documents stored in Amazon S3 |
+| `calculate_business_metrics` | Calculate ROI and related financial metrics |
 
-### Example: ROI Analysis
+### Example: Business Metrics
 
-**Input**
+**Request**
 
 ```json
 {
-  "prompt": "Calculate ROI for an investment of $13,300,000 and total returns of $20,000,000."
+  "prompt": "Calculate ROI for an investment of $13.3M and total returns of $20M."
 }
 ```
 
-**Validated calculation**
+**Calculation**
 
 ```text
-Investment:   $13,300,000
-Returns:      $20,000,000
-Net Benefit:   $6,700,000
-ROI:                 50.38%
+Investment       $13,300,000
+Total Returns    $20,000,000
+Net Benefit       $6,700,000
+
+ROI                    50.38%
 ```
-
-### Example: Knowledge Retrieval
-
-**Prompt**
-
-```text
-Search the knowledge base for AI investment ROI and
-summarize the retrieved document.
-```
-
-The deployed agent successfully retrieved information attributed to `ai-from-data-to-roi.pdf` and generated a document-based summary.
 
 ---
 
-## 🔄 CI/CD Pipeline
+## Workflow Automation with n8n
+
+n8n acts as an external orchestration layer, connecting workflow triggers to the deployed AI backend.
 
 ```mermaid
 flowchart LR
-    A["GitHub Commit"] --> B["Automated Tests"]
+    A["Webhook Trigger"] --> B["n8n Workflow"]
+    B --> C["AWS IAM Authentication"]
+    C --> D["API Gateway"]
+    D --> E["Lambda AI Agent"]
+    E --> F["JSON Response"]
+
+    classDef workflow fill:#312e81,stroke:#a78bfa,color:#ffffff
+    class A,B,C,D,E,F workflow
+```
+
+The integration uses AWS Signature Version 4 authentication to invoke the API Gateway endpoint without exposing it as a publicly callable unauthenticated API.
+
+---
+
+## CI/CD Architecture
+
+The deployment pipeline automates application testing, container builds, image publishing, and Lambda updates.
+
+```mermaid
+flowchart LR
+    A["GitHub Push"] --> B["pytest"]
     B --> C["Docker Build"]
     C --> D["Amazon ECR"]
     D --> E["AWS Lambda"]
-    E --> F["Deployment Verification"]
 
-    classDef primary fill:#1e1b4b,stroke:#818cf8,color:#fff
-    class A,B,C,D,E,F primary
+    classDef pipeline fill:#172554,stroke:#38bdf8,color:#ffffff
+    class A,B,C,D,E pipeline
 ```
 
-The deployment workflow uses GitHub Actions with AWS OIDC authentication, avoiding long-lived AWS access keys in the CI/CD pipeline.
+### Deployment Approach
+
+- GitHub Actions runs the automated workflow.
+- AWS OIDC provides temporary deployment credentials.
+- Docker packages the application and dependencies.
+- Amazon ECR stores the container image.
+- AWS Lambda runs the updated image.
+
+This approach avoids storing long-lived AWS access keys in the GitHub deployment workflow.
 
 ---
 
-## 🔐 Security Architecture
+## Security and Observability
 
-The platform applies multiple layers of access control:
+The platform uses AWS-native security and monitoring components.
 
-- API Gateway configured with AWS IAM authorization
+**Security**
+
+- IAM-authorized API Gateway endpoint
 - Dedicated Lambda execution role
-- Knowledge Base retrieval scoped to a specific resource
-- S3 listing and reading scoped to a configured bucket
-- GitHub Actions authentication through AWS OIDC
-- CloudWatch logging and error monitoring
+- Resource-scoped S3 and Knowledge Base access
+- Dedicated IAM permissions for n8n API invocation
+- GitHub Actions authentication through OIDC
 
-**Security hardening in progress:** Narrowing Bedrock model invocation permissions, reviewing credential rotation, and expanding automated security validation.
+**Observability**
 
----
-
-## 📡 Observability
-
-```mermaid
-flowchart LR
-    L["AWS Lambda"] --> C["CloudWatch"]
-    A["API Gateway"] --> C
-    C --> E["Error Alarms"]
-    E --> S["Amazon SNS"]
-    S --> M["Email Notifications"]
-```
-
-Monitoring includes Lambda error metrics, API Gateway 5xx metrics, execution logs, and SNS email delivery.
+- CloudWatch application logs
+- Lambda error monitoring
+- API Gateway 5xx monitoring
+- CloudWatch alarms
+- SNS email notifications
 
 ---
 
-## 🎯 Engineering Highlights
+## Engineering Notes
 
-This project demonstrates experience with:
+### Bedrock Knowledge Base SDK Compatibility
 
-- Designing cloud-native AI backend architectures
-- Integrating LLMs with external tools
-- Implementing retrieval-augmented generation
-- Securing serverless APIs using AWS IAM
-- Building automated container deployment pipelines
-- Integrating workflow automation with cloud services
-- Debugging AWS SDK compatibility issues
-- Implementing logging, monitoring, and notification systems
+During container deployment, the Knowledge Base retrieval integration encountered an AWS SDK parameter validation error.
 
----
+The managed Knowledge Base required `managedSearchConfiguration`, but the installed botocore service model did not recognize that parameter.
 
-## 🛠️ Future Improvements
+The issue was resolved by updating the boto3 and botocore dependencies and adding a Docker build-time compatibility check.
 
-- [ ] Narrow Bedrock model IAM permissions
-- [ ] Add automated post-deployment smoke tests
-- [ ] Improve S3 pagination and duplicate handling
-- [ ] Add structured agent evaluation reports
-- [ ] Implement AWS budget alerts
-- [ ] Test real CloudWatch alarm transitions
-- [ ] Review n8n credential rotation
-- [ ] Add a deployment walkthrough and demo recording
+This ensured the deployed Lambda container supported the required Bedrock Agent Runtime request structure.
 
 ---
 
-## 👨‍💻 Author
+## Repository
+
+The project is maintained in GitHub with automated deployment through GitHub Actions.
+
+**Repository:** [enterprise-agentic-ai-platform](https://github.com/GopikrishnaAshok/enterprise-agentic-ai-platform)
+
+---
 
 <div align="center">
 
-### Gopi Krishna
+## About the Developer
 
-**Senior Software Engineer | Backend Engineering | AWS Cloud | DevOps | Agentic AI**
+### GopiKrishna
 
-Building practical cloud-native and AI-powered engineering solutions.
+**Senior Software Engineer**
 
-[![GitHub](https://img.shields.io/badge/GitHub-GopikrishnaAshok-181717?style=for-the-badge&logo=github)](https://github.com/GopikrishnaAshok)
+Backend Engineering · AWS Cloud · DevOps · Generative AI · Agentic AI
 
-<br/>
+[![GitHub](https://img.shields.io/badge/GitHub-GopikrishnaAshok-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/GopikrishnaAshok)
 
-⭐ **If you find this project useful, consider starring the repository.**
+<br>
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:00D4FF,50:6C3BFF,100:090979&height=110&section=footer" width="100%" alt="Footer"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:06b6d4,50:4338ca,100:0f172a&height=110&section=footer" width="100%" alt="Footer"/>
 
 </div>
