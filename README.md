@@ -1,3 +1,4 @@
+
 <div align="center">
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f172a,50:4338ca,100:06b6d4&height=220&section=header&text=ENTERPRISE%20AGENTIC%20AI&fontSize=36&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Cloud-Native%20AI%20Operations%20Platform&descAlignY=60&descSize=17" width="100%" alt="Enterprise Agentic AI"/>
@@ -20,6 +21,16 @@ A serverless AI operations platform combining **Amazon Bedrock, Strands Agents, 
 ![Strands Agents](https://img.shields.io/badge/Framework-Strands_Agents-6366F1)
 ![Deployment](https://img.shields.io/badge/Deployment-AWS_Lambda-16A34A)
 ![Security](https://img.shields.io/badge/Security-AWS_IAM-0284C7)
+
+<br>
+
+<a href="https://drive.google.com/drive/folders/11Wg1ZDwDPw7fY4diX6jZz1agM?usp=drive_link">
+  <img src="https://img.shields.io/badge/PROJECT_DEMO-View_Evidence-06b6d4?style=for-the-badge&logo=googledrive&logoColor=white" alt="Project Demo and Evidence"/>
+</a>
+
+<br>
+
+<sub>🔒 Demo and deployment evidence stored privately · Access available upon request</sub>
 
 </div>
 
@@ -244,6 +255,20 @@ flowchart LR
 
 The integration uses AWS Signature Version 4 authentication to invoke the API Gateway endpoint without exposing it as a publicly callable unauthenticated API.
 
+### Validated n8n Workflows
+
+**Workflow 1 — Direct AWS Agent Invocation**
+
+`Manual Trigger → HTTP Request → AWS API Gateway`
+
+Demonstrates direct API invocation from n8n using AWS authentication.
+
+**Workflow 2 — Webhook-Driven Agent Automation**
+
+`Webhook → HTTP Request → Respond to Webhook`
+
+Demonstrates external HTTP requests triggering the AWS-hosted agent and returning its response through n8n.
+
 ---
 
 ## CI/CD Architecture
@@ -292,6 +317,88 @@ The platform uses AWS-native security and monitoring components.
 - API Gateway 5xx monitoring
 - CloudWatch alarms
 - SNS email notifications
+
+---
+
+<div align="center">
+
+## 🎬 Project Demo & Technical Evidence
+
+### End-to-End Enterprise AI Automation
+
+Explore the recorded demonstration and supporting technical evidence for the Enterprise Agentic AI Operations Platform.
+
+The private evidence collection includes:
+
+</div>
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+### 🎥 AI Agent Demonstration
+
+- n8n webhook-triggered execution
+- AWS API Gateway integration
+- Agent tool execution
+- AI-generated responses
+
+</td>
+<td width="50%" valign="top">
+
+### ☁️ AWS Deployment Evidence
+
+- Lambda container deployment
+- API Gateway IAM authorization
+- Bedrock Knowledge Base configuration
+- CloudWatch execution logs
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+### 🔄 Workflow Automation
+
+- n8n HTTP Request integration
+- Webhook-triggered automation
+- Successful workflow executions
+- JSON response handling
+
+</td>
+<td valign="top">
+
+### 🚀 DevOps & Monitoring
+
+- GitHub Actions successful CI/CD runs
+- Automated tests and Docker validation
+- Lambda deployment pipeline
+- CloudWatch monitoring alarms
+
+</td>
+</tr>
+</table>
+
+<div align="center">
+
+### 📁 Private Demo & Evidence Repository
+
+<a href="https://drive.google.com/drive/folders/11Wg1ZDwDPw7fY4diX6jZz1L36xioJagM?usp=drive_link">
+  <img src="https://img.shields.io/badge/Google_Drive-View_Project_Demo_%26_Evidence-4285F4?style=for-the-badge&logo=googledrive&logoColor=white" alt="View Enterprise Agentic AI Demo and Evidence"/>
+</a>
+
+<br><br>
+
+<img src="https://img.shields.io/badge/ACCESS-RESTRICTED-64748B?style=flat-square&logo=googlecloud&logoColor=white" alt="Restricted Access"/>
+
+<br>
+
+<sub>
+  Demo recordings and technical evidence are stored in a private Google Drive folder.
+  Access is available upon request for technical evaluation and recruitment.
+</sub>
+
+</div>
 
 ---
 
