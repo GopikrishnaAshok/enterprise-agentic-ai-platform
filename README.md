@@ -1,4 +1,3 @@
-```html
 <div align="center">
 
 # ⚡ ENTERPRISE AGENTIC AI
@@ -321,4 +320,3 @@ Building practical cloud-native and AI-powered engineering solutions.
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:00D4FF,50:6C3BFF,100:090979&height=110&section=footer" width="100%" alt="Footer"/>
 
 </div>
-```
